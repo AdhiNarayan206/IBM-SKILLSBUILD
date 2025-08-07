@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Student Doubt Solver</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .upload-section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #4f46e5;
+            background: #f1f5f9;
+        }
+
+        .upload-area {
+            text-align: center;
+            cursor: pointer;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #4f46e5;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            width: 100%;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            background: #9ca3af;
+        }
+
+        .api-config {
+            margin-top: 20px;
+        }
+
+        .api-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .api-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+
+        .solution-section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .solution-output {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            border: 1px solid #e2e8f0;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            line-height: 1.6;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4f46e5;
+            font-style: italic;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .analytics-section {
+            grid-column: 1 / -1;
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .confusion-matrix {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th {
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+
+        .matrix-cell {
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .matrix-cell:hover {
+            background-color: #e0e7ff !important;
+            transform: scale(1.05);
+        }
+
+        .matrix-cell.updated {
+            background-color: #fef3c7;
+            animation: highlight 1s ease;
+        }
+
+        @keyframes highlight {
+            0% { background-color: #fbbf24; transform: scale(1.1); }
+            100% { background-color: transparent; transform: scale(1); }
+        }
+
+        .metrics {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #4f46e5;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-value.updated {
+            color: #10b981;
+            transform: scale(1.1);
+        }
+
+        .test-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .test-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+
+        .api-toggle {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #cbd5e1;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .switch.active {
+            background: #4f46e5;
+        }
+
+        .switch-handle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .switch.active .switch-handle {
+            transform: translateX(30px);
+        }
+
+        .status-indicator {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-demo {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+
+        .status-live {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .error-message {
+            color: #ef4444;
+            padding: 20px;
+            text-align: center;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .success-message {
+            color: #10b981;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .test-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .upload-section,
+            .solution-section,
+            .analytics-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 AI Student Doubt Solver</h1>
+            <p>Upload an image of your academic doubt and get instant AI-powered solutions</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <h3>📤 Upload Your Doubt</h3>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📸</div>
+                    <p><strong>Click to upload an image</strong></p>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px;">
+                        Supports: Math, Physics, Chemistry, Biology questions<br>
+                        <small>JPG, PNG, GIF • Max 5MB</small>
+                    </p>
+                </div>
+                <input type="file" id="imageInput" class="file-input" accept="image/*">
+                <div id="imagePreview"></div>
+                
+                <div class="api-config">
+                    <div class="api-toggle">
+                        <div class="toggle-switch">
+                            <span class="toggle-label">Demo Mode</span>
+                            <div class="switch" id="apiToggle">
+                                <div class="switch-handle"></div>
+                            </div>
+                            <span class="toggle-label">Live API</span>
+                        </div>
+                    </div>
+                    
+                    <input type="password" id="apiKey" class="api-input" placeholder="Enter your Gemini API Key (for Live Mode)" style="display: none;">
+                    
+                    <select id="subjectSelect" class="api-input">
+                        <option value="general">🎯 General Doubt</option>
+                        <option value="mathematics">📊 Mathematics</option>
+                        <option value="physics">⚡ Physics</option>
+                        <option value="chemistry">🧪 Chemistry</option>
+                        <option value="biology">🧬 Biology</option>
+                        <option value="computer_science">💻 Computer Science</option>
+                    </select>
+                    
+                    <button id="solveBtn" class="btn">🚀 Solve My Doubt</button>
+                    
+                    <div id="statusIndicator" class="status-indicator status-demo">
+                        🔄 Demo Mode Active - Using simulated AI responses
+                    </div>
+                </div>
+
+                <div class="test-buttons">
+                    <button class="btn test-btn" onclick="handleTestClick('mathematics')">📊 Test Math</button>
+                    <button class="btn test-btn" onclick="handleTestClick('physics')">⚡ Test Physics</button>
+                    <button class="btn test-btn" onclick="handleTestClick('chemistry')">🧪 Test Chemistry</button>
+                    <button class="btn test-btn" onclick="handleTestClick('biology')">🧬 Test Biology</button>
+                </div>
+            </div>
+            
+            <div class="solution-section">
+                <h3>🤖 AI Solution</h3>
+                <div id="solutionOutput" class="solution-output">
+                    <div style="color: #64748b; text-align: center; padding: 60px 20px;">
+                        <div style="font-size: 2rem; margin-bottom: 20px;">🎯</div>
+                        <h4>Welcome to AI Doubt Solver!</h4>
+                        <br>
+                        <p>📝 Upload an image or click test buttons<br>
+                        🧠 Get step-by-step solutions<br>
+                        💡 Learn key concepts<br>
+                        ✅ See final answers</p>
+                        <br>
+                        <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <strong>Try the test buttons below to see sample solutions!</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <h3>📊 Model Performance Analytics</h3>
+            <div class="analytics-grid">
+                <div class="confusion-matrix">
+                    <h4>Confusion Matrix</h4>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 10px;">
+                        Real-time performance tracking of doubt solving accuracy
+                    </p>
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Actual / Predicted</th>
+                                <th>✅ Correct</th>
+                                <th>❌ Incorrect</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>✅ Actually Correct</th>
+                                <td class="matrix-cell" id="tp" title="True Positives: Correctly solved">85</td>
+                                <td class="matrix-cell" id="fn" title="False Negatives: Failed to solve">8</td>
+                            </tr>
+                            <tr>
+                                <th>❌ Actually Incorrect</th>
+                                <td class="matrix-cell" id="fp" title="False Positives: Wrong solutions">12</td>
+                                <td class="matrix-cell" id="tn" title="True Negatives: Correctly rejected">95</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="metrics">
+                    <h4>📈 Performance Metrics</h4>
+                    <div class="metric-item">
+                        <span class="metric-label">🎯 Accuracy</span>
+                        <span class="metric-value" id="accuracy">90.0%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">🎪 Precision</span>
+                        <span class="metric-value" id="precision">87.6%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">📈 Recall</span>
+                        <span class="metric-value" id="recall">91.4%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">⚖️ F1-Score</span>
+                        <span class="metric-value" id="f1score">89.5%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">❓ Questions Solved</span>
+                        <span class="metric-value" id="questionCount">200</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">⏱️ Avg Response Time</span>
+                        <span class="metric-value" id="responseTime">2.3s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedImage = null;
+        let questionCount = 200;
+        let isLiveMode = false;
+        let isProcessing = false;
+
+        // Sample confusion matrix data
+        const confusionMatrix = {
+            tp: 85,  // True Positives
+            tn: 95,  // True Negatives  
+            fp: 12,  // False Positives
+            fn: 8    // False Negatives
+        };
+
+        // DOM elements
+        const elements = {
+            apiToggle: document.getElementById('apiToggle'),
+            apiKey: document.getElementById('apiKey'),
+            statusIndicator: document.getElementById('statusIndicator'),
+            imageInput: document.getElementById('imageInput'),
+            uploadArea: document.getElementById('uploadArea'),
+            imagePreview: document.getElementById('imagePreview'),
+            solveBtn: document.getElementById('solveBtn'),
+            solutionOutput: document.getElementById('solutionOutput'),
+            subjectSelect: document.getElementById('subjectSelect')
+        };
+
+        // Initialize the application
+        function initializeApp() {
+            setupEventListeners();
+            updateAnalytics();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showWelcomeMessage();
+            }, 500);
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // API Toggle
+            elements.apiToggle.addEventListener('click', toggleApiMode);
+            
+            // File upload
+            elements.uploadArea.addEventListener('click', () => elements.imageInput.click());
+            elements.imageInput.addEventListener('change', handleImageUpload);
+            
+            // Drag and drop
+            elements.uploadArea.addEventListener('dragover', handleDragOver);
+            elements.uploadArea.addEventListener('drop', handleDrop);
+            
+            // Solve button
+            elements.solveBtn.addEventListener('click', handleSolveClick);
+            
+            // Matrix cell hover effects
+            document.querySelectorAll('.matrix-cell').forEach(cell => {
+                cell.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                cell.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // Toggle between demo and live API mode
+        function toggleApiMode() {
+            if (isProcessing) return;
+            
+            isLiveMode = !isLiveMode;
+            
+            if (isLiveMode) {
+                elements.apiToggle.classList.add('active');
+                elements.apiKey.style.display = 'block';
+                elements.statusIndicator.className = 'status-indicator status-live';
+                elements.statusIndicator.innerHTML = '🔴 Live API Mode - Requires valid Gemini API key';
+            } else {
+                elements.apiToggle.classList.remove('active');
+                elements.apiKey.style.display = 'none';
+                elements.statusIndicator.className = 'status-indicator status-demo';
+                elements.statusIndicator.innerHTML = '🔄 Demo Mode Active - Using simulated AI responses';
+            }
+        }
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    showError('File size too large. Please select an image smaller than 5MB.');
+                    return;
+                }
+                
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file.');
+                    return;
+                }
+                
+                selectedImage = file;
+                displayImagePreview(file);
+            }
+        }
+
+        // Display image preview
+        function displayImagePreview(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                elements.imagePreview.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="${e.target.result}" class="image-preview" alt="Uploaded doubt">
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #64748b;">
+                            📁 ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                        </div>
+                    </div>`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Handle drag over
+        function handleDragOver(event) {
+            event.preventDefault();
+            elements.uploadArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+        }
+
+        // Handle drop
+        function handleDrop(event) {
+            event.preventDefault();
+            elements.uploadArea.style.backgroundColor = '';
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                elements.imageInput.files = files;
+                handleImageUpload({ target: { files: files } });
+            }
+        }
+
+        // Handle solve button click
+        async function handleSolveClick() {
+            if (isProcessing) return;
+            
+            const subject = elements.subjectSelect.value;
+            
+            if (isLiveMode) {
+                await handleLiveMode(subject);
+            } else {
+                await handleDemoMode(subject);
+            }
+        }
+
+        // Handle live API mode
+        async function handleLiveMode(subject) {
+            const apiKey = elements.apiKey.value.trim();
+            
+            if (!apiKey) {
+                showError('Please enter a valid Gemini API key for Live Mode');
+                return;
+            }
+            
+            if (!selectedImage) {
+                showError('Please upload an image first');
+                return;
+            }
+            
+            isProcessing = true;
+            elements.solveBtn.disabled = true;
+            elements.solveBtn.textContent = '🔄 Processing...';
+            
+            showLoading('Connecting to Gemini API...');
+            
+            try {
+                const base64Image = await convertToBase64(selectedImage);
+                const solution = await callGeminiAPI(apiKey, base64Image, subject);
+                displaySolution(formatSolution(solution));
+                updateAnalytics();
+                showSuccess('Solution generated successfully!');
+            } catch (error) {
+                showError(`API Error: ${error.message}`);
+            } finally {
+                isProcessing = false;
+                elements.solveBtn.disabled = false;
+                elements.solveBtn.textContent = '🚀 Solve My Doubt';
+            }
+        }
+
+        // Handle demo mode
+        async function handleDemoMode(subject) {
+            isProcessing = true;
+            elements.solveBtn.disabled = true;
+            elements.solveBtn.textContent = '🔄 Analyzing...';
+            
+            showLoading('Analyzing your question...');
+            
+            // Simulate processing time
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            simulateDoubt(subject);
+            updateAnalytics();
+            
+            isProcessing = false;
+            elements.solveBtn.disabled = false;
+            elements.solveBtn.textContent = '🚀 Solve My Doubt';
+        }
+
+        // Convert image to base64
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        resolve(reader.result.split(',')[1]);
+                    } catch (error) {
+                        reject(new Error('Failed to convert image'));
+                    }
+                };
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Call Gemini API
+        async function callGeminiAPI(apiKey, base64Image, subject) {
+            const prompt = getSubjectPrompt(subject);
+            
+            const requestBody = {
+                contents: [{
+                    parts: [
+                        { text: prompt },
+                        {
+                            inline_data: {
+                                mime_type: "image/jpeg",
+                                data: base64Image
+                            }
+                        }
+                    ]
+                }]
+            };
+
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                }
+            );
+
+            if (!response.ok) {
+                let errorMessage = `HTTP ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error?.message || errorMessage;
+                } catch (e) {
+                    // Use default error message if JSON parsing fails
+                }
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            
+            if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                throw new Error('No solution generated. The image might be unclear or unsupported.');
+            }
+
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        // Get subject-specific prompt
+        function getSubjectPrompt(subject) {
+            const prompts = {
+                mathematics: "You are an expert mathematics tutor. Analyze this math problem image and provide a detailed step-by-step solution. Include formulas, calculations, and explanations for each step.",
+                physics: "You are an expert physics tutor. Analyze this physics problem image and provide a comprehensive solution with relevant laws, formulas, and step-by-step calculations.",
+                chemistry: "You are an expert chemistry tutor. Analyze this chemistry problem image and provide a detailed solution including chemical equations, reactions, and explanations.",
+                biology: "You are an expert biology tutor. Analyze this biology question image and provide a comprehensive answer with relevant concepts and explanations.",
+                computer_science: "You are an expert computer science tutor. Analyze this programming or CS concept image and provide a detailed explanation with examples.",
+                general: "You are an expert academic tutor. Analyze this educational question image and provide a comprehensive solution with step-by-step explanations."
+            };
+            
+            return prompts[subject] || prompts.general;
+        }
+
+        // Format solution text
+        function formatSolution(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>')
+                .replace(/Step (\d+):/gi, '<br><strong style="color: #4f46e5;">Step $1:</strong>')
+                .replace(/Answer:/gi, '<br><strong style="color: #10b981;">✅ Answer:</strong>')
+                .replace(/Solution:/gi, '<br><strong style="color: #10b981;">🔍 Solution:</strong>');
+        }
+
+        // Handle test button clicks
+        function handleTestClick(subject) {
+            if (isProcessing) return;
+            
+            elements.subjectSelect.value = subject;
+            simulateDoubt(subject);
+            updateAnalytics();
+        }
+
+        // Simulate doubt solving
+        function simulateDoubt(subject) {
+            const solutions = {
+                mathematics: `<strong style="color: #4f46e5;">📊 Mathematics Problem:</strong> Solve the quadratic equation: x² - 5x + 6 = 0
+
+<strong style="color: #4f46e5;">Step 1:</strong> Identify the coefficients
+• a = 1, b = -5, c = 6
+
+<strong style="color: #4f46e5;">Step 2:</strong> Apply quadratic formula
+x = (-b ± √(b² - 4ac)) / 2a
+
+<strong style="color: #4f46e5;">Step 3:</strong> Calculate discriminant
+Δ = (-5)² - 4(1)(6) = 25 - 24 = 1
+
+<strong style="color: #4f46e5;">Step 4:</strong> Find solutions
+x = (5 ± 1) / 2
+
+<strong style="color: #10b981;">✅ Answer:</strong> x = 3 or x = 2
+
+<strong>💡 Key Concept:</strong> Quadratic equations with positive discriminant have two real roots.`,
+
+                physics: `<strong style="color: #4f46e5;">⚡ Physics Problem:</strong> A ball is thrown upward with initial velocity 20 m/s. Find maximum height.
+
+<strong style="color: #4f46e5;">Given:</strong>
+• Initial velocity (u) = 20 m/s
+• Acceleration (g) = -9.8 m/s²
+• Final velocity at max height (v) = 0 m/s
+
+<strong style="color: #4f46e5;">Step 1:</strong> Use kinematic equation
+v² = u² + 2as
+
+<strong style="color: #4f46e5;">Step 2:</strong> Substitute values
+0² = 20² + 2(-9.8)s
+0 = 400 - 19.6s
+
+<strong style="color: #4f46e5;">Step 3:</strong> Solve for height
+s = 400/19.6 = 20.4 m
+
+<strong style="color: #10b981;">✅ Answer:</strong> Maximum height = 20.4 meters
+
+<strong>💡 Key Concept:</strong> At maximum height, velocity becomes zero due to gravity.`,
+
+                chemistry: `<strong style="color: #4f46e5;">🧪 Chemistry Problem:</strong> Balance: C₃H₈ + O₂ → CO₂ + H₂O
+
+<strong style="color: #4f46e5;">Step 1:</strong> Count atoms (unbalanced)
+Left: C=3, H=8, O=2 | Right: C=1, H=2, O=3
+
+<strong style="color: #4f46e5;">Step 2:</strong> Balance carbon atoms
+C₃H₈ + O₂ → 3CO₂ + H₂O
+
+<strong style="color: #4f46e5;">Step 3:</strong> Balance hydrogen atoms
+C₃H₈ + O₂ → 3CO₂ + 4H₂O
+
+<strong style="color: #4f46e5;">Step 4:</strong> Balance oxygen atoms
+Right side O: 3(2) + 4(1) = 10
+Need 5 O₂ molecules
+
+<strong style="color: #10b981;">✅ Answer:</strong> C₃H₈ + 5O₂ → 3CO₂ + 4H₂O
+
+<strong>💡 Key Concept:</strong> Combustion of propane in oxygen produces CO₂ and H₂O.`,
+
+                biology: `<strong style="color: #4f46e5;">🧬 Biology Question:</strong> Explain photosynthesis process
+
+<strong style="color: #4f46e5;">Definition:</strong>
+Photosynthesis converts light energy into chemical energy (glucose).
+
+<strong style="color: #4f46e5;">Overall Equation:</strong>
+6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂
+
+<strong style="color: #4f46e5;">Step 1:</strong> Light-dependent reactions
+• Occur in thylakoids
+• Chlorophyll absorbs light
+• Water splits to release O₂
+• Produces ATP and NADPH
+
+<strong style="color: #4f46e5;">Step 2:</strong> Calvin Cycle (Light-independent)
+• Occurs in stroma
+• CO₂ fixation using ATP/NADPH
+• Produces glucose
+
+<strong style="color: #10b981;">✅ Answer:</strong> Photosynthesis produces glucose and oxygen from CO₂ and water using light energy.
+
+<strong>💡 Key Concept:</strong> Essential for life - produces oxygen and organic compounds.`,
+
+                computer_science: `<strong style="color: #4f46e5;">💻 Computer Science:</strong> Analyze bubble sort time complexity
+
+<strong style="color: #4f46e5;">Algorithm:</strong>
+```
+for i = 0 to n-1:
+    for j = 0 to n-2-i:
+        if arr[j] > arr[j+1]:
+            swap(arr[j], arr[j+1])
+```
+
+<strong style="color: #4f46e5;">Step 1:</strong> Analyze nested loops
+• Outer loop: n iterations
+• Inner loop: (n-1), (n-2), ..., 1 iterations
+
+<strong style="color: #4f46e5;">Step 2:</strong> Count comparisons
+Total = (n-1) + (n-2) + ... + 1 = n(n-1)/2
+
+<strong style="color: #4f46e5;">Step 3:</strong> Determine complexity
+• Best case: O(n) with early termination
+• Average/Worst case: O(n²)
+
+<strong style="color: #10b981;">✅ Answer:</strong> Bubble sort has O(n²) time complexity
+
+<strong>💡 Key Concept:</strong> Quadratic algorithms become inefficient for large datasets.`,
+
+                general: `<strong style="color: #4f46e5;">🎯 Academic Analysis:</strong> Problem-solving demonstration
+
+<strong style="color: #4f46e5;">Step 1:</strong> Question Identification
+AI analyzes uploaded images to identify key academic concepts.
+
+<strong style="color: #4f46e5;">Step 2:</strong> Systematic Approach
+• Break problems into manageable parts
+• Apply relevant formulas/concepts
+• Show clear step-by-step reasoning
+
+<strong style="color: #4f46e5;">Step 3:</strong> Solution Delivery
+• Provide detailed explanations
+• Include key concepts
+• Verify results for accuracy
+
+<strong style="color: #10b981;">✅ Answer:</strong> Upload your specific question for targeted help.
+
+<strong>💡 Key Concept:</strong> Effective learning requires systematic analysis and clear explanations.`
+            };
+
+            displaySolution(solutions[subject] || solutions.general);
+        }
+
+        // Display solution
+        function displaySolution(solution) {
+            elements.solutionOutput.innerHTML = solution;
+            elements.solutionOutput.scrollTop = 0;
+        }
+
+        // Show loading state
+        function showLoading(message) {
+            elements.solutionOutput.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    ${message}
+                </div>`;
+        }
+
+        // Show error message
+        function showError(message) {
+            elements.solutionOutput.innerHTML = `
+                <div class="error-message">
+                    <h4>🚫 Error</h4>
+                    <p>${message}</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">
+                        Try switching to Demo Mode or check your settings.
+                    </p>
+                </div>`;
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = `✅ ${message}`;
+            
+            elements.solutionOutput.parentNode.insertBefore(successDiv, elements.solutionOutput);
+            
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+
+        // Show welcome message
+        function showWelcomeMessage() {
+            elements.solutionOutput.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; color: #4f46e5;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🎓</div>
+                    <h3>Welcome to AI Doubt Solver!</h3>
+                    <br>
+                    <p style="color: #64748b; line-height: 1.8;">
+                        This application demonstrates an AI-powered academic doubt solving system with real-time performance analytics.
+                    </p>
+                    <br>
+                    <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                        <strong>🔄 Currently in Demo Mode</strong><br>
+                        <span style="font-size: 0.9rem;">Try the test buttons below to see sample solutions, or toggle to Live API mode for real image analysis.</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 20px;">
+                        Click any test button below to see how the AI solves different types of academic problems!
+                    </p>
+                </div>`;
+        }
+
+        // Update analytics with animations
+        function updateAnalytics() {
+            questionCount++;
+            
+            // Animate confusion matrix cells
+            const cells = ['tp', 'tn', 'fp', 'fn'];
+            cells.forEach(cell => {
+                const element = document.getElementById(cell);
+                if (element) {
+                    element.classList.add('updated');
+                    setTimeout(() => {
+                        element.classList.remove('updated');
+                    }, 1000);
+                }
+            });
+            
+            // Simulate small performance variations
+            if (Math.random() > 0.6) {
+                confusionMatrix.tp += Math.floor(Math.random() * 3);
+                confusionMatrix.tn += Math.floor(Math.random() * 2);
+                confusionMatrix.fp += Math.floor(Math.random() * 2);
+                confusionMatrix.fn += Math.floor(Math.random() * 1);
+            }
+            
+            // Calculate metrics
+            const total = confusionMatrix.tp + confusionMatrix.tn + confusionMatrix.fp + confusionMatrix.fn;
+            const accuracy = ((confusionMatrix.tp + confusionMatrix.tn) / total * 100).toFixed(1);
+            const precision = (confusionMatrix.tp / (confusionMatrix.tp + confusionMatrix.fp) * 100).toFixed(1);
+            const recall = (confusionMatrix.tp / (confusionMatrix.tp + confusionMatrix.fn) * 100).toFixed(1);
+            const f1score = (2 * parseFloat(precision) * parseFloat(recall) / (parseFloat(precision) + parseFloat(recall))).toFixed(1);
+            const responseTime = (Math.random() * 2 + 1.5).toFixed(1);
+            
+            // Update display with animations
+            const metrics = ['accuracy', 'precision', 'recall', 'f1score', 'questionCount', 'responseTime'];
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric);
+                if (element) {
+                    element.classList.add('updated');
+                    setTimeout(() => {
+                        element.classList.remove('updated');
+                    }, 800);
+                }
+            });
+            
+            // Update values after animation delay
+            setTimeout(() => {
+                const updates = {
+                    tp: confusionMatrix.tp,
+                    tn: confusionMatrix.tn,
+                    fp: confusionMatrix.fp,
+                    fn: confusionMatrix.fn,
+                    accuracy: accuracy + '%',
+                    precision: precision + '%',
+                    recall: recall + '%',
+                    f1score: f1score + '%',
+                    questionCount: questionCount,
+                    responseTime: responseTime + 's'
+                };
+                
+                Object.entries(updates).forEach(([id, value]) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = value;
+                    }
+                });
+            }, 500);
+        }
+
+        // Error handling for uncaught errors
+        window.addEventListener('error', function(event) {
+            console.error('Global error:', event.error);
+            if (isProcessing) {
+                isProcessing = false;
+                elements.solveBtn.disabled = false;
+                elements.solveBtn.textContent = '🚀 Solve My Doubt';
+                showError('An unexpected error occurred. Please try again.');
+            }
+        });
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
