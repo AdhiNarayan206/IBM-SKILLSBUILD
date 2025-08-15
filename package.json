@@ -7,7 +7,7 @@
   "scripts": {
     "start": "cd backend && node server.js",
     "dev": "cd backend && node server.js",
-    "build": "echo 'No build step needed'"
+    "build": "echo 'Frontend is static - no build needed'"
   },
   "engines": {
     "node": ">=18.0.0"
