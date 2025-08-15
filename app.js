@@ -254,6 +254,15 @@ async function solveDoubt() {
         other: document.getElementById('otherKey').value
     };
     
+    // Check if at least one API key is provided
+    const hasApiKey = Object.values(apiKeys).some(key => key && key.trim());
+    if (!hasApiKey) {
+        alert('Please enter at least one API key in the configuration panel (⚙️ button) to use the AI service.');
+        solveBtn.disabled = false;
+        btnText.textContent = 'Get Solution';
+        return;
+    }
+    
     formData.append('apiKeys', JSON.stringify(apiKeys));
     
     try {
@@ -597,8 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedKeys.gemini) {
         document.getElementById('geminiKey').value = savedKeys.gemini;
     } else {
-        // Set default Gemini API key for testing
-        document.getElementById('geminiKey').value = 'AIzaSyA3_LeDwQten5frQcahGtySIBpdKUGouR4';
+        // API key should be entered by user for security
+        document.getElementById('geminiKey').placeholder = 'Enter your Gemini API key here';
     }
     
     if (savedKeys.anthropic) document.getElementById('anthropicKey').value = savedKeys.anthropic;
