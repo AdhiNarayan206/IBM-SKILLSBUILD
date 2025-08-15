@@ -2,8 +2,10 @@
 let currentUser = null;
 let authToken = null;
 
-// API Base URL
-const API_BASE = 'http://localhost:3000';
+// API Base URL - automatically detect environment
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000' 
+    : 'https://clearq-ai-study-assistant.onrender.com';
 
 // Check if user is already logged in
 function checkAuth() {
