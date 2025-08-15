@@ -1,0 +1,847 @@
+/* Luxury Minimalistic UI */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    color: #1a202c;
+}
+
+/* Login Section Styles */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 32px;
+    margin: 20px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+    letter-spacing: -0.8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-header p {
+    color: #718096;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.login-tabs {
+    display: flex;
+    background: rgba(247, 250, 252, 0.8);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+
+.login-tab {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: #718096;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-tab.active {
+    background: white;
+    color: #2d3748;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.login-form {
+    margin-bottom: 24px;
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #4a5568;
+}
+
+.remember-me input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 4px;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.remember-me input[type="checkbox"]:checked + .checkmark {
+    background: #4299e1;
+    border-color: #4299e1;
+}
+
+.remember-me input[type="checkbox"]:checked + .checkmark:after {
+    content: "✓";
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.forgot-password {
+    color: #4299e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #3182ce;
+}
+
+.login-btn {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.login-divider {
+    position: relative;
+    text-align: center;
+    margin: 24px 0;
+    color: #a0aec0;
+    font-size: 14px;
+}
+
+.login-divider:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.login-divider span {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 16px;
+    position: relative;
+}
+
+.social-login {
+    display: flex;
+    gap: 12px;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    color: #4a5568;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+.social-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.google-btn:hover .social-icon path {
+    filter: brightness(1.1);
+}
+
+.github-btn {
+    color: #333;
+}
+
+.github-btn:hover {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+}
+
+.user-info {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: rgba(66, 153, 225, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.user-info span {
+    color: #4299e1;
+    font-weight: 500;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.lux-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-left: 80px;
+    padding: 20px;
+}
+
+.lux-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-left: 80px;
+}
+
+/* Sidebar Styling */
+.lux-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 72px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 100;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.lux-sidebar-btn {
+    margin: 24px 0;
+    padding: 16px;
+    background: transparent;
+    color: #4a5568;
+    border: none;
+    border-radius: 16px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lux-sidebar-btn:hover {
+    background: rgba(74, 85, 104, 0.1);
+    color: #2d3748;
+    transform: translateY(-2px);
+}
+
+.lux-sidebar-btn:active {
+    transform: translateY(0);
+}
+
+/* Panel Styling */
+.lux-panel {
+    position: fixed;
+    left: 88px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 400px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    padding: 32px;
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(-50%) translateX(-20px) scale(0.95);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(-50%) translateX(0) scale(1);
+    }
+}
+
+.lux-panel-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+/* Header Styling */
+.lux-header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.lux-header h1 {
+    font-size: 36px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+    letter-spacing: -0.8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.lux-header p {
+    color: #718096;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* Upload Section */
+.lux-upload {
+    background: rgba(247, 250, 252, 0.8);
+    border: 2px dashed #e2e8f0;
+    border-radius: 16px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.lux-upload:hover {
+    border-color: #cbd5e0;
+    background: rgba(237, 242, 247, 0.9);
+    transform: translateY(-2px);
+}
+
+.lux-upload-icon {
+    font-size: 48px;
+    color: #a0aec0;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.lux-upload:hover .lux-upload-icon {
+    color: #718096;
+    transform: scale(1.1);
+}
+
+.lux-upload-text {
+    font-size: 18px;
+    color: #4a5568;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.lux-upload-support {
+    color: #a0aec0;
+    font-size: 14px;
+}
+
+.file-input {
+    display: none;
+}
+
+.lux-image-preview img {
+    max-width: 100%;
+    max-height: 280px;
+    border-radius: 12px;
+    margin: 16px 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.file-info {
+    background: rgba(66, 153, 225, 0.1);
+    color: #4299e1;
+    padding: 16px;
+    border-radius: 12px;
+    margin: 16px 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Input Styling */
+.lux-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+    font-weight: 400;
+}
+
+.lux-input:focus {
+    outline: none;
+    border-color: #90cdf4;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 3px rgba(144, 205, 244, 0.1);
+}
+
+.lux-input::placeholder {
+    color: #a0aec0;
+}
+
+/* Button Styling */
+.lux-btn {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.lux-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(66, 153, 225, 0.3);
+}
+
+.lux-btn:active {
+    transform: translateY(0);
+}
+
+.lux-btn:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Solution Display */
+.lux-solution {
+    background: rgba(247, 250, 252, 0.6);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.lux-solution-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+}
+
+.lux-solution-output {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #4a5568;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 12px;
+    max-height: none;
+    overflow: visible;
+}
+
+.lux-solution-output:last-child {
+    margin-bottom: 0;
+}
+
+.lux-solution-output strong {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+/* Enhanced Solution Formatting */
+.solution-section {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.solution-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.solution-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+}
+
+.solution-content {
+    padding: 0 4px;
+}
+
+.solution-steps {
+    counter-reset: step-counter;
+    margin: 20px 0;
+}
+
+.solution-step {
+    counter-increment: step-counter;
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.05);
+    border-left: 4px solid #6366f1;
+    border-radius: 0 12px 12px 0;
+    position: relative;
+}
+
+.solution-step::before {
+    content: "Step " counter(step-counter);
+    font-weight: 600;
+    color: #6366f1;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.solution-explanation {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+}
+
+.solution-explanation-title {
+    color: #059669;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.solution-explanation-title::before {
+    content: "💡";
+    margin-right: 8px;
+}
+
+.solution-final-answer {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    margin: 24px 0 16px 0;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.solution-final-answer-title {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.solution-math {
+    font-family: 'Courier New', monospace;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-weight: 600;
+    color: #4338ca;
+}
+
+.solution-summary {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.solution-summary-title {
+    color: #d97706;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.solution-summary-title::before {
+    content: "📋";
+    margin-right: 8px;
+}
+
+/* History Panel Specific */
+.lux-history-panel {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.lux-history-panel .lux-solution-output {
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.lux-history-panel .lux-solution-output:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(160, 174, 192, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(160, 174, 192, 0.7);
+}
+
+/* Fade-in Animation */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .lux-card {
+        max-width: 800px;
+        margin-left: 60px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .lux-card {
+        max-width: 700px;
+        margin-left: 40px;
+    }
+    
+    .lux-sidebar {
+        width: 60px;
+    }
+    
+    .lux-panel {
+        left: 76px;
+        width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .lux-container {
+        padding: 10px;
+        padding-left: 0;
+    }
+    
+    .lux-sidebar {
+        display: none;
+    }
+    
+    .lux-panel {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-width: none;
+        top: 20px;
+        bottom: 20px;
+        transform: none;
+        max-height: none;
+        height: auto;
+    }
+    
+    .lux-card {
+        margin: 0;
+        margin-left: 0;
+        padding: 24px 20px;
+        max-width: none;
+        border-radius: 16px;
+        gap: 24px;
+    }
+    
+    .lux-header h1 {
+        font-size: 28px;
+    }
+    
+    .lux-upload {
+        padding: 32px 20px;
+    }
+    
+    .lux-upload-icon {
+        font-size: 40px;
+    }
+    
+    .lux-upload-text {
+        font-size: 16px;
+    }
+    
+    .solution-header {
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+    
+    .solution-final-answer {
+        font-size: 16px;
+        padding: 16px 20px;
+    }
+    
+    .solution-step {
+        padding: 12px 16px;
+        margin-bottom: 12px;
+    }
+    
+    .solution-explanation,
+    .solution-summary {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lux-card {
+        padding: 20px 16px;
+        gap: 20px;
+    }
+    
+    .lux-header h1 {
+        font-size: 24px;
+    }
+    
+    .lux-upload {
+        padding: 24px 16px;
+    }
+    
+    .lux-upload-icon {
+        font-size: 36px;
+    }
+    
+    .lux-solution-output {
+        padding: 16px;
+        font-size: 14px;
+    }
+    
+    .solution-header {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    
+    .solution-final-answer {
+        font-size: 14px;
+        padding: 14px 16px;
+    }
+}
